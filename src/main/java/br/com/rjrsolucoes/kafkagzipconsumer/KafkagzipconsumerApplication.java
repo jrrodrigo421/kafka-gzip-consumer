@@ -27,6 +27,8 @@ public class KafkagzipconsumerApplication {
 	@Autowired
 	private ArquivoGeradoRepository repository;
 
+	@Autowired
+
 	private static final Logger logger = LoggerFactory.getLogger(KafkagzipconsumerApplication.class);
 
 	@Value("${gzip.output-dir}")
@@ -84,12 +86,11 @@ public class KafkagzipconsumerApplication {
 			try (GZIPOutputStream gzipOutputStream = new GZIPOutputStream(new FileOutputStream(outputPath.toFile()))) {
 				while (!messageBuffer.isEmpty()) {
 					String message = messageBuffer.take();
-					mensagens.append(message).append("\n"); // Adiciona a mensagem ao acumulador
+					mensagens.append(message).append("\n");
 					gzipOutputStream.write((message + "\n").getBytes());
 				}
 			}
 
-			// Salva os metadados no banco
 			ArquivoGerado arquivo = new ArquivoGerado(mensagens.toString(), fileName);
 			repository.save(arquivo);
 
