@@ -3,10 +3,14 @@ package br.com.rjrsolucoes.kafkagzipconsumer;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.kafka.annotation.KafkaListener;
+
+import br.com.rjrsolucoes.kafkagzipconsumer.model.ArquivoGerado;
+import br.com.rjrsolucoes.kafkagzipconsumer.repository.ArquivoGeradoRepository;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -19,6 +23,9 @@ import java.util.zip.GZIPOutputStream;
 
 @SpringBootApplication
 public class KafkagzipconsumerApplication {
+
+	@Autowired
+	private ArquivoGeradoRepository repository;
 
 	private static final Logger logger = LoggerFactory.getLogger(KafkagzipconsumerApplication.class);
 
@@ -63,23 +70,28 @@ public class KafkagzipconsumerApplication {
 		if (messageBuffer.isEmpty())
 			return;
 
+		StringBuilder mensagens = new StringBuilder();
+
 		try {
 			Path outputDirPath = Paths.get(outputDir);
 			if (!Files.exists(outputDirPath)) {
 				Files.createDirectories(outputDirPath);
 			}
 
-			// [TODO] comentado para testes
-			// String fileName = "messages-" + System.currentTimeMillis() + ".gzip";
-			String fileName = "messages-" + System.currentTimeMillis() + ".DOC";
+			String fileName = "messages-" + System.currentTimeMillis() + ".gzip";
 			Path outputPath = outputDirPath.resolve(fileName);
 
 			try (GZIPOutputStream gzipOutputStream = new GZIPOutputStream(new FileOutputStream(outputPath.toFile()))) {
 				while (!messageBuffer.isEmpty()) {
 					String message = messageBuffer.take();
+					mensagens.append(message).append("\n"); // Adiciona a mensagem ao acumulador
 					gzipOutputStream.write((message + "\n").getBytes());
 				}
 			}
+
+			// Salva os metadados no banco
+			ArquivoGerado arquivo = new ArquivoGerado(mensagens.toString(), fileName);
+			repository.save(arquivo);
 
 			logger.info("Mensagens despejadas em: {}", outputPath);
 		} catch (IOException | InterruptedException e) {
@@ -89,4 +101,5 @@ public class KafkagzipconsumerApplication {
 			lastDumpTime = System.currentTimeMillis();
 		}
 	}
+
 }
