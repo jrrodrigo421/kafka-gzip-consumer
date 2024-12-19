@@ -20,20 +20,17 @@ public class ArquivoGerado {
   @Column(name = "nome_arquivo", nullable = false)
   private String nomeArquivo;
 
-  // Construtor padrão
   public ArquivoGerado() {
     this.id = UUID.randomUUID();
     this.dataHoraCriacao = LocalDateTime.now();
   }
 
-  // Construtor com argumentos
   public ArquivoGerado(String mensagens, String nomeArquivo) {
     this();
     this.mensagens = mensagens;
     this.nomeArquivo = nomeArquivo;
   }
 
-  // Getters e Setters
   public UUID getId() {
     return id;
   }

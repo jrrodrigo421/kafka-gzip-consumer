@@ -25,7 +25,7 @@ public class KafkaConfig {
     return new DefaultErrorHandler(
         new DeadLetterPublishingRecoverer(kafkaTemplate,
             (record, exception) -> new TopicPartition(record.topic() + ".DLT", record.partition())),
-        new FixedBackOff(1000L, 3) // Retry: 1 segundo de intervalo, 3 tentativas
+        new FixedBackOff(1000L, 3)
     );
   }
 
