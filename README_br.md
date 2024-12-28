@@ -77,6 +77,8 @@ spring.jpa.show-sql=true
    
    👉🏾 **[Repository](https://github.com/jrrodrigo421/kafka-producer-test)**&nbsp;&nbsp;<img src="images_readme/github.png" alt="emoji" width="20" height="20">
    
+   🛜 **[Página Online](https://kafkaproducertest.vercel.app)**
+   
    <img src="images_readme/kafka_producer_ui.jpg" alt="emoji" width="320" height="380">
 
    1. **Clonar o Repositório Frontend**:
