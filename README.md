@@ -1,39 +1,40 @@
-# **Documentação da API - Kafka GZIP Consumer**
 
-## **Descrição do Projeto**
-Esta API foi desenvolvida para consumir mensagens do Apache Kafka, salvá-las em arquivos no formato **GZIP** no disco e persistir os metadados em um banco de dados **PostgreSQL**. A aplicação utiliza o framework **Spring Boot** com Java 17 e possui uma rota exposta para recebimento de mensagens, permitindo a produção direta para o tópico Kafka.
+# **API Documentation - Kafka GZIP Consumer**
+
+## **Project Description**
+This API is designed to consume messages from Apache Kafka, save them as **GZIP** files on disk, and persist metadata in a **PostgreSQL** database. The application uses the **Spring Boot** framework with Java 17 and includes an exposed route for receiving messages, allowing direct production to the Kafka topic.
 
 ---
 
-## **Tecnologias Utilizadas**
+## **Technologies Used**
 
 - **Java 17**
 - **Spring Boot**
-- **Apache Kafka** (Serviço de Mensageria)
-- **PostgreSQL** (Banco de Dados Relacional)
-- **Docker** (Para execução local de Kafka)
-- **GZIP** (Compressão das mensagens em arquivos)
+- **Apache Kafka** (Messaging Service)
+- **PostgreSQL** (Relational Database)
+- **Docker** (For local Kafka execution)
+- **GZIP** (Message compression into files)
 
 ---
 
-## **Pré-requisitos**
+## **Prerequisites**
 
-1. **Java 17** instalado
-2. **Docker** instalado e configurado
-3. Servidor **PostgreSQL** configurado
-4. Serviço do **Kafka** em execução (usando Docker)
+1. **Java 17** installed
+2. **Docker** installed and configured
+3. Configured **PostgreSQL** server
+4. Running **Kafka** service (via Docker)
 
 ---
 
-## **Configuração do Projeto**
+## **Project Configuration**
 
 ### **application.properties**
 
 ```properties
-# Configurações da Aplicação
+# Application Configurations
 spring.application.name=kafkagzipconsumer 
 
-# Configurações do Kafka
+# Kafka Configurations
 spring.kafka.bootstrap-servers=localhost:9092
 spring.kafka.consumer.group-id=kafka-gzip-group
 spring.kafka.consumer.auto-offset-reset=earliest
@@ -41,12 +42,12 @@ spring.kafka.consumer.key-deserializer=org.apache.kafka.common.serialization.Str
 spring.kafka.consumer.value-deserializer=org.apache.kafka.common.serialization.StringDeserializer
 kafka.topic=my-topic
 
-# Configurações para o GZIP
+# GZIP Configurations
 gzip.output-dir=./output
 gzip.max-messages=5
 gzip.time-interval=10000
 
-# Configurações do PostgreSQL
+# PostgreSQL Configurations
 spring.datasource.url=jdbc:postgresql://localhost:5432/kafkagzip?ssl=false
 spring.datasource.username=postgres
 spring.datasource.password=postgres
@@ -57,84 +58,89 @@ spring.jpa.show-sql=true
 
 ---
 
-## **Execução do Projeto**
+## **How to Run the Project**
 
-1. **Subir o Kafka utilizando Docker**:
+1. **Start Kafka using Docker**:
    ```bash
    docker-compose up -d
    ```
 
-2. **Produzir Mensagens no Kafka**:
-   Execute o comando abaixo para produzir mensagens diretamente no tópico **my-topic**:
+2. **Produce Messages to Kafka**:
+   Use the following command to produce messages directly to the **my-topic** topic:
    ```bash
    docker exec -it broker kafka-console-producer.sh --broker-list localhost:9092 --topic my-topic
    ```
-   ## OU
-      
-   ### Usar o **Frontend (Interface de Produção de Mensagens)**
 
-   1. **Clonar o Repositório Frontend**:
+   ### OR
+
+   ### Use the **Frontend (Message Production Interface)**
+   
+   <br>
+   
+   👉🏾 **[Repository](https://github.com/jrrodrigo421/kafka-producer-test)**&nbsp;&nbsp;<img src="images_readme/github.png" alt="emoji" width="20" height="20">
+   
+   <img src="images_readme/kafka_producer_ui.jpg" alt="emoji" width="320" height="380">
+   
+
+
+   1. **Clone the Frontend Repository**:
       ```bash
       git clone https://github.com/jrrodrigo421/kafka-producer-test.git
       cd kafka-producer-ui
       ```
 
-   2. **Instalar Dependências**:
+   2. **Install Dependencies**:
       ```bash
       npm install
       ```
 
-   3. **Executar a Interface**:
+   3. **Run the Interface**:
       ```bash
       npm start
       ```
-      - A interface será disponibilizada em `http://localhost:3000`.
+      - The interface will be available at `http://localhost:3000`.
 
-   ---
-
-
-
-3. **Executar a API**:
-   - Execute o projeto Spring Boot com o seguinte comando:
-     ```bash
-     mvn spring-boot:run
-     ```
-
----
-
-## **Rotas da API**
-
-### **1. Rota de Produção de Mensagens**
-
-- **Endpoint**: `POST /api/kafka/send`
-- **Descrição**: Permite enviar mensagens diretamente para o tópico Kafka **my-topic**.
-- **Parâmetros**: 
-   - **Body**: Texto simples (String)
-- **Exemplo de Request**:
-   ```http
-   POST http://localhost:8080/api/kafka/send
-   Content-Type: text/plain
-   
-   Esta é uma mensagem de teste para o Kafka!
+3. **Run the API**:
+   Start the Spring Boot project using:
+   ```bash
+   mvn spring-boot:run
    ```
 
 ---
 
-## **Comandos Úteis**
+## **API Endpoints**
 
-1. **Verificar Tópicos do Kafka**:
+### **1. Message Production Endpoint**
+
+- **Endpoint**: `POST /api/kafka/send`
+- **Description**: Sends messages directly to the Kafka **my-topic** topic.
+- **Parameters**:
+   - **Body**: Plain text (String)
+- **Request Example**:
+   ```http
+   POST http://localhost:8080/api/kafka/send
+   Content-Type: text/plain
+
+   This is a test message for Kafka!
+   ```
+
+---
+
+## **Useful Commands**
+
+1. **List Kafka Topics**:
    ```bash
    docker exec -it broker kafka-topics.sh --bootstrap-server localhost:9092 --list
    ```
 
-2. **Consumir Mensagens**:
+2. **Consume Messages**:
    ```bash
    docker exec -it broker kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic my-topic --from-beginning
    ```
 
 ---
 
-## **Conclusão**
-Essa documentação descreve como configurar, executar e interagir com a API Kafka GZIP Consumer, fornecendo um fluxo robusto e eficiente para consumo e persistência de mensagens em Kafka.
+## **Conclusion**
+This documentation explains how to configure, run, and interact with the Kafka GZIP Consumer API, providing a robust and efficient flow for consuming and persisting Kafka messages.
 
 🚀
