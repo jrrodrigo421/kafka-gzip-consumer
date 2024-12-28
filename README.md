@@ -75,8 +75,6 @@ spring.jpa.show-sql=true
 
    ### Use the **Frontend (Message Production Interface)**
    
-   <br>
-   
    👉🏾 **[Repository](https://github.com/jrrodrigo421/kafka-producer-test)**&nbsp;&nbsp;<img src="images_readme/github.png" alt="emoji" width="20" height="20">
    
    🛜 **[Online Page](https://kafkaproducertest.vercel.app)**
