@@ -54,7 +54,11 @@ public class KafkagzipconsumerApplication {
 	public void listen(ConsumerRecord<String, String> record) {
 		try {
 			messageBuffer.put(record.value());
-			if (shouldDump()) {
+			
+			Boolean checkShouldDump = shouldDump();
+			System.out.println("***** checkShouldDump ******: " + checkShouldDump);
+			
+			if (checkShouldDump) {
 				dumpMessagesToDisk();
 			}
 		} catch (InterruptedException e) {
@@ -64,7 +68,20 @@ public class KafkagzipconsumerApplication {
 	}
 
 	private boolean shouldDump() {
-		return messageBuffer.size() >= maxMessages ||
+		
+		var checkMaxMessages = maxMessages;
+		var checkTimeInterval = timeInterval;
+		var checkLastDumpTime = lastDumpTime;
+		var checkSystemCurrentTimeMillis = System.currentTimeMillis();
+		var checkTotal = checkSystemCurrentTimeMillis - checkLastDumpTime;
+		
+		System.out.println("***** checkMaxMessages ******: " + checkMaxMessages);
+		System.out.println("****** checkTimeInterval ******: " + checkTimeInterval);
+		System.out.println("****** checkLastDumpTime ******: " + checkLastDumpTime);
+		System.out.println("****** checkSystemCurrentTimeMillis ******: " + checkSystemCurrentTimeMillis);
+		System.out.println("****** checkTotal ******: " + checkTotal);
+		
+		return messageBuffer.size() > maxMessages ||
 				(System.currentTimeMillis() - lastDumpTime) >= timeInterval;
 	}
 
